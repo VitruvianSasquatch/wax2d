@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 CC := gcc
-CFLAGS := -g -std=gnu99 -Wall -Wextra -Wpedantic
+CFLAGS := -g -std=gnu17 -Wall -Wextra -Wpedantic
 CLIBS := -lm -lSDL2 -lpthread
 
 # Final binary

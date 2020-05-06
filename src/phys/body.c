@@ -10,7 +10,7 @@
  * @param y The initial y position of the body. 
  * @return Body_t The body with the specified mass and position, with all other state variables zeroed. 
  */
-Body_t body_init(float m, float x, float y)
+Body_t body_init(double m, double x, double y)
 {
 	Body_t body = {
 		.isLocked = 0,
@@ -42,7 +42,7 @@ void body_applyForce(Body_t *body, Vec2_t F)
  * @param body A reference to the body to update. 
  * @param dt The time difference between the last call to this function. 
  */
-void body_update(Body_t *body, float dt)
+void body_update(Body_t *body, double dt)
 {
 	if (!body->isLocked) {
 		Vec2_t a = vec2_scale(body->F, 1/body->m);

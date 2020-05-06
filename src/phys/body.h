@@ -7,7 +7,7 @@ typedef struct {
 	int isLocked;
 
 	//State vars:
-	float m; //Mass
+	double m; //Mass
 	Vec2_t p; //Position
 	Vec2_t v; //Velocity
 
@@ -16,10 +16,10 @@ typedef struct {
 } Body_t;
 
 
-Body_t body_init(float m, float x, float y);
+Body_t body_init(double m, double x, double y);
 
 void body_applyForce(Body_t *body, Vec2_t F);
 
-void body_update(Body_t *body, float dt);
+void body_update(Body_t *body, double dt);
 
 #endif //BODY_H

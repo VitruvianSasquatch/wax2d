@@ -9,14 +9,26 @@
 
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mouse.h>
 
 
 #include <time.h>
 
 
 
+int eventHandler(void *data, SDL_Event *event)
+{
+    switch (event->type) {
+        case SDL_QUIT:
+            int *isRunning = ((int **)data)[0];
+            *isRunning = 0; //This allows the current loop to finish. 
+            break;
+    }
+}
 
-SDL_Window *initSDL(int width, int height)
+
+
+SDL_Window *init(int width, int height)
 {
     if( SDL_Init(SDL_INIT_VIDEO & 0) < 0) {
         fprintf(stderr, "Could not initialise SDL: %s\n", SDL_GetError());
@@ -34,69 +46,60 @@ SDL_Window *initSDL(int width, int height)
 }
 
 
-void handleInput(int *isRunning, int16_t *leftSpeed, int16_t *rightSpeed) {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_KEYDOWN: //Key pressed
-                switch (event.key.keysym.sym) {
-                    case SDLK_a:
-                        *leftSpeed = INT16_MAX;
-                        break;
-                    case SDLK_d:
-                        *rightSpeed = INT16_MAX;
-                        break;
-                }
-                break;
- 
-            case SDL_KEYUP: //Key released
-                switch (event.key.keysym.sym) {
-                    case SDLK_a:
-                        *leftSpeed = 0;
-                        break;
-                    case SDLK_d:
-                        *rightSpeed = 0;
-                        break;
-                }
-                break;
 
-            case SDL_QUIT:
-                *isRunning = 0;
 
-            default:
-                break;
-        }
+typedef enum {
+    MOVE_LEFT = 0, 
+    MOVE_RIGHT, 
+    JUMP, 
+    DECREASE_MASS, 
+    INCREASE_MASS, 
+    NUM_ACTIONS
+} Action_t;
+
+const static keyAssignments[NUM_ACTIONS] = {SDLK_a, SDLK_d, SDLK_SPACE, SDLK_w, SDLK_s};
+
+
+void updateInput(uint8_t *keyboardState, int *numKeys, uint32_t *mouseState, int *mouseX, int *mouseY)
+{
+    SDL_PumpEvents();
+    keyboardState = SDL_GetKeyState(numKeys);
+    *mouseState = SDL_GetMouseState(mouseX, mouseY);
+}
+
+void handleInput(void) {
+    static uint8_t *keyboardState = NULL;
+    static int numKeys = 0;
+    static uint32_t mouseState = 0;
+    static int mouseX = 0;
+    static int mouseY = 0;
+
+
+    updateInput(keyboardState, &numKeys, &mouseState, &mouseX, &mouseY);
+
+
+    if (keyboardState[keyAssignments[MOVE_LEFT]]) {
+        //do stuff. 
     }
+    //etc. 
 }
 
 
 
 int main(void)
 {
-    
-    SDL_Window *window = initSDL(640, 480);
-
-
-    #define NUM_IMU_AXES 9
     int isRunning = 1;
-    int16_t imuData[NUM_IMU_AXES] = {0};
-    void *receiveThreadArgs[2] = {NULL};
-    receiveThreadArgs[0] = (void *)&isRunning;
-    receiveThreadArgs[1] = (void *)imuData;
-    pthread_t receiveThread;
-    pthread_create(&receiveThread, NULL, &receiveTask, receiveThreadArgs); 
 
-    int bytesSent = comms_sendPacket(Alfie, Interface, Micro, Enable, Integer, 1);
+    SDL_Window *window = init(640, 480);
+    SDL_AddEventWatch(&eventHandler, &isRunning); //Handles exit etc. 
+
+
+    
     while (isRunning) {
 
 
-        handleInput(&isRunning, &leftSpeed, &rightSpeed);
+        handleInput();
 
     }
 
-    comms_sendPacket(Alfie, Interface, Micro, Enable, Integer, 0);
-    pthread_join(receiveThread, NULL);
-    comms_disconnect();
-    SDL_Quit();
-    return 0;
 }
