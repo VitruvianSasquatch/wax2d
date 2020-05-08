@@ -6,8 +6,7 @@ typedef struct {
 	double x, y;
 } Vec2_t;
 
-const Vec2_t VEC2_ZERO  = {0, 0};
-
+#define VEC2_ZERO ((Vec2_t){0, 0})
 
 Vec2_t vec2_sum(Vec2_t v1, Vec2_t v2);
 

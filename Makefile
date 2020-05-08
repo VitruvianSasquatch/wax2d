@@ -17,8 +17,9 @@ OBJ := $(CS:%.c=$(BUILD_DIR)/%.o)
 # Gcc/Clang will create these .d files containing dependencies.
 DEP := $(OBJ:%.o=%.d)
 
-# Default target named after the binary.
-$(BIN) : $(BUILD_DIR)/$(BIN)
+# Default target
+.PHONY : all
+all : $(BUILD_DIR)/$(BIN)
 
 # Actual target of the binary - depends on all .o files.
 $(BUILD_DIR)/$(BIN) : $(OBJ)
@@ -46,5 +47,5 @@ clean :
 
 
 .PHONY : run
-run : $(BIN)
+run : all
 	./$(BUILD_DIR)/$(BIN)

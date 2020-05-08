@@ -12,7 +12,7 @@ static Body_t bodies[PHYS_MAX_BODIES] = {0};
 static int numBodies = 0;
 
 
-inline double doubleClock(void)
+static inline double doubleClock(void)
 {
 	return (double)clock()/CLOCKS_PER_SEC;
 }
