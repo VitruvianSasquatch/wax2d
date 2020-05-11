@@ -13,7 +13,18 @@ void phys_update(void);
 
 PhysId_t phys_addBody(double m, double x, double y);
 
+
+
+/**
+ * @brief Applies an equal and opposite force to two given bodies. 
+ * 
+ * @param a The first body in the collision. 
+ * @param b The second body in the collision. 
+ * @param F The magnitude of the reactive force between the two bodies, along the vector outwards from their CoM. 
+ */
 void phys_collide(PhysId_t a, PhysId_t b, double F);
+
+void phys_forceBody(PhysId_t b, double fx, double fy);
 
 
 #endif //PHYS_H

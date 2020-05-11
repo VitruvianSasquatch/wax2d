@@ -26,18 +26,20 @@ PhysId_t phys_addBody(double m, double x, double y)
 }
 
 
-/**
- * @brief Applies an equal and opposite force to two given bodies. 
- * 
- * @param a The first body in the collision. 
- * @param b The second body in the collision. 
- * @param F The magnitude of the reactive force between the two bodies, along the vector outwards from their CoM. 
- */
+
 void phys_collide(PhysId_t a, PhysId_t b, double F) {
 	Vec2_t dirAB = vec2_norm(vec2_diff(bodies[b].p, bodies[a].p));
 	body_applyForce(&bodies[a], vec2_scale(dirAB, F));
 	body_applyForce(&bodies[b], vec2_scale(dirAB, -F));
 }
+
+
+
+void phys_forceBody(PhysId_t b, double fx, double fy)
+{
+	body_applyForce(&bodies[b], (Vec2_t){fx, fy});
+}
+
 
 
 void phys_update(void)

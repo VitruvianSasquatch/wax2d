@@ -14,7 +14,7 @@
 
 #include <time.h>
 
-
+#include "phys/phys.h"
 #include "input/input.h"
 
 
@@ -93,11 +93,16 @@ int main(void)
 
     input_init();
 
+    PhysId_t wax = phys_addBody(100, 0, 0);
+
     
     while (isRunning) {
 
         input_update();
         handleInput();
+
+
+        phys_update();
 
     }
 
