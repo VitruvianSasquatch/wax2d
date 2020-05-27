@@ -1,4 +1,5 @@
 #include <time.h>
+#include <unistd.h>
 
 
 #include "phys.h"
@@ -14,7 +15,9 @@ static int numBodies = 0;
 
 static inline double doubleClock(void)
 {
-	return (double)clock()/CLOCKS_PER_SEC;
+	struct timespec t;
+    clock_gettime(CLOCK_MONOTONIC, &t);
+    return (double)t.tv_sec + (double)t.tv_nsec/1e9;
 }
 
 

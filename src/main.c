@@ -4,12 +4,14 @@
 
 #include <assert.h>
 
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mouse.h>
+#include <SDL2/SDL_image.h>
 
 
 #include <time.h>
@@ -31,24 +33,47 @@ int eventHandler(void *data, SDL_Event *event)
 
 
 
-SDL_Window *init(int width, int height)
+bool initSDL(int width, int height, SDL_Window *window, SDL_Renderer *renderer)
 {
-    if( SDL_Init(SDL_INIT_VIDEO & 0) < 0) {
+    bool success = true;
+    if ( SDL_Init(SDL_INIT_VIDEO & 0) < 0) {
         fprintf(stderr, "Could not initialise SDL: %s\n", SDL_GetError());
-        exit(-1);
+        success = false;
     }
 
-    SDL_Window *window = SDL_CreateWindow("Alfie Driver", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
-    if (!window){
+    window = SDL_CreateWindow("Alfie Driver", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
+    if (!window) {
         fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
-        SDL_Quit();
-        exit(-1);
-    }
+        success = false;
+    } else {
+        renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+        if (!renderer) {
+			fprintf(stderr, "Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+            success = false;
+		} else {
+			//Initialize renderer color
+			SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
 
-    return window;
+			//Initialize PNG loading
+			int imgFlags = IMG_INIT_PNG;
+			if ( !( IMG_Init(imgFlags) & imgFlags ) ) {
+				fprintf(stderr, "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                success = false;
+			}
+		}
+    }
+    return success;
 }
 
 
+bool closeSDL(void)
+{
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+
+    IMG_Quit();
+    SDL_Quit();
+}
 
 
 typedef enum {
@@ -70,7 +95,8 @@ static const int keyAssignments[NUM_ACTIONS] = {
 
 
 
-void handleInput(void) {
+
+void handleInput(PhysId_t wax) {
     
     if (input_isDown(keyAssignments[MOVE_LEFT])) {
         printf("Left down!\n");
@@ -86,7 +112,10 @@ int main(void)
 {
     int isRunning = 1;
 
-    SDL_Window *window = init(640, 480);
+    SDL_Window *window = NULL;
+    SDL_Renderer *renderer = NULL;
+    
+    init(640, 480, window, renderer);
 
     int *eventRefs[1] = {&isRunning};
     SDL_AddEventWatch(&eventHandler, eventRefs); //Handles exit etc. 
@@ -95,15 +124,19 @@ int main(void)
 
     PhysId_t wax = phys_addBody(100, 0, 0);
 
+
+    
     
     while (isRunning) {
 
         input_update();
-        handleInput();
+        handleInput(wax);
 
 
         phys_update();
 
     }
+
+    
 
 }
