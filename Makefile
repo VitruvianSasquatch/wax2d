@@ -1,8 +1,8 @@
 SHELL := /bin/bash
 
 CC := gcc
-CFLAGS := -g -std=gnu17 -Wall -Wextra -Wpedantic
-CLIBS := -lm -lSDL2 -lpthread
+CFLAGS := -g -std=gnu11 -Wall -Wextra -Wpedantic
+CLIBS := -lm -lSDL2 -lSDL2_image
 
 # Final binary
 BIN := main

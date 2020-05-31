@@ -45,6 +45,18 @@ void phys_forceBody(PhysId_t b, double fx, double fy)
 
 
 
+double phys_getBodyX(PhysId_t id)
+{
+	return bodies[id].p.x;
+}
+
+double phys_getBodyY(PhysId_t id)
+{
+	return bodies[id].p.y;
+}
+
+
+
 void phys_update(void)
 {
 	static double tPrev = -1;
