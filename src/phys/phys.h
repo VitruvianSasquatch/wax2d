@@ -1,6 +1,7 @@
 #ifndef PHYS_H
 #define PHYS_H
 
+#include "vec2.h"
 #include "body.h"
 
 
@@ -9,9 +10,7 @@
 typedef int PhysId_t;
 
 
-double phys_getBodyX(PhysId_t id);
-
-double phys_getBodyY(PhysId_t id);
+Vec2_t phys_getBodyPos(PhysId_t id);
 
 void phys_update(void);
 
@@ -28,7 +27,8 @@ PhysId_t phys_addBody(double m, double x, double y);
  */
 void phys_collide(PhysId_t a, PhysId_t b, double F);
 
-void phys_forceBody(PhysId_t b, double fx, double fy);
+void phys_forceBody(PhysId_t b, Vec2_t f);
 
+void phys_applyImpulse(PhysId_t b, Vec2_t dp);
 
 #endif //PHYS_H

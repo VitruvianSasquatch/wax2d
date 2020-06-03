@@ -7,6 +7,8 @@
 #include "vec2.h"
 #include "body.h"
 
+#include <stdio.h>
+
 
 
 static Body_t bodies[PHYS_MAX_BODIES] = {0};
@@ -16,8 +18,8 @@ static int numBodies = 0;
 static inline double doubleClock(void)
 {
 	struct timespec t;
-    clock_gettime(CLOCK_MONOTONIC, &t);
-    return (double)t.tv_sec + (double)t.tv_nsec/1e9;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	return (double)t.tv_sec + (double)t.tv_nsec/1e9;
 }
 
 
@@ -38,21 +40,22 @@ void phys_collide(PhysId_t a, PhysId_t b, double F) {
 
 
 
-void phys_forceBody(PhysId_t b, double fx, double fy)
+void phys_forceBody(PhysId_t b, Vec2_t f)
 {
-	body_applyForce(&bodies[b], (Vec2_t){fx, fy});
+	body_applyForce(&bodies[b], f);
 }
 
 
 
-double phys_getBodyX(PhysId_t id)
+void phys_applyImpulse(PhysId_t b, Vec2_t dp)
 {
-	return bodies[id].p.x;
+	bodies[b].v = vec2_sum(bodies[b].v, vec2_scale(dp, 1/bodies[b].m));
 }
 
-double phys_getBodyY(PhysId_t id)
+
+Vec2_t phys_getBodyPos(PhysId_t id)
 {
-	return bodies[id].p.y;
+	return bodies[id].p;
 }
 
 

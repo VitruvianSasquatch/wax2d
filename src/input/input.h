@@ -2,9 +2,9 @@
 #define INPUT_H
 
 
-#define SDLK_LEFTCLICK (-1)
-#define SDLK_MIDDLECLICK (-2)
-#define SDLK_RIGHTCLICK (-3)
+#define SDL_SCANCODE_LEFTCLICK (-1)
+#define SDL_SCANCODE_MIDDLECLICK (-2)
+#define SDL_SCANCODE_RIGHTCLICK (-3)
 
 
 void input_init(void);

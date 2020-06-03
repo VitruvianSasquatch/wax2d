@@ -16,6 +16,7 @@
 
 #include <time.h>
 
+#include "phys/vec2.h"
 #include "phys/phys.h"
 #include "input/input.h"
 
@@ -87,26 +88,42 @@ typedef enum {
 	JUMP, 
 	DECREASE_MASS, 
 	INCREASE_MASS, 
+	STEELPUSH,
 	NUM_ACTIONS
 } Action_t;
+
 
 static const int keyAssignments[NUM_ACTIONS] = {
 	SDL_SCANCODE_A, 
 	SDL_SCANCODE_D, 
 	SDL_SCANCODE_SPACE, 
 	SDL_SCANCODE_W, 
-	SDL_SCANCODE_S
+	SDL_SCANCODE_S, 
+	SDL_SCANCODE_LEFTCLICK
 };
 
-
+#define RUN_IMPULSE 5000
 
 
 void handleInput(PhysId_t wax)
 {
-	if (input_isDown(keyAssignments[MOVE_LEFT])) {
-		printf("Left down!\n");
-	} else {
-		printf("Left up!\n");
+	if (input_justPressed(keyAssignments[MOVE_LEFT])) {
+		phys_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
+	} else if (input_justReleased(keyAssignments[MOVE_LEFT])) {
+		phys_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
+	}
+
+	if (input_justPressed(keyAssignments[MOVE_RIGHT])) {
+		phys_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
+	} else if (input_justReleased(keyAssignments[MOVE_RIGHT])) {
+		phys_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
+	}
+
+	if (input_isDown(keyAssignments[STEELPUSH])) {
+		Vec2_t offset = vec2_diff(phys_getBodyPos(wax), (Vec2_t){input_getMouseX(), input_getMouseY()});
+		double len = vec2_mag(offset);
+		offset = vec2_scale(vec2_norm(offset), 5000);
+		phys_forceBody(wax, offset);
 	}
 	//etc. 
 }
@@ -125,7 +142,7 @@ int main(void)
 
 	input_init();
 
-	PhysId_t wax = phys_addBody(100, 50, 50);
+	PhysId_t wax = phys_addBody(100, 0, 0);
 
 
 	while (isRunning) {
@@ -141,9 +158,8 @@ int main(void)
 		SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
 		SDL_RenderClear(renderer);
 
-		static int x = 50;
-		int y = phys_getBodyY(wax);
-		SDL_Rect fillRect = {x++, y, 10, 20};
+		Vec2_t waxPos = phys_getBodyPos(wax);
+		SDL_Rect fillRect = {waxPos.x, waxPos.y, 10, 20};
 		SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
 		SDL_RenderFillRect(renderer, &fillRect);
 
