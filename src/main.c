@@ -16,14 +16,19 @@
 
 #include <time.h>
 
+#include "phys/body.h"
 #include "phys/vec2.h"
-#include "phys/phys.h"
+
 #include "input/input.h"
+
+
+
 
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+#define MAX_NUM_COINS 100
 
 
 int eventHandler(void *data, SDL_Event *event)
@@ -105,28 +110,58 @@ static const int keyAssignments[NUM_ACTIONS] = {
 #define RUN_IMPULSE 5000
 
 
-void handleInput(PhysId_t wax)
+
+
+
+void handleInput(Body_t *wax)
 {
 	if (input_justPressed(keyAssignments[MOVE_LEFT])) {
-		phys_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
+		body_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
 	} else if (input_justReleased(keyAssignments[MOVE_LEFT])) {
-		phys_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
+		body_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
 	}
 
 	if (input_justPressed(keyAssignments[MOVE_RIGHT])) {
-		phys_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
+		body_applyImpulse(wax, (Vec2_t){RUN_IMPULSE, 0});
 	} else if (input_justReleased(keyAssignments[MOVE_RIGHT])) {
-		phys_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
+		body_applyImpulse(wax, (Vec2_t){-RUN_IMPULSE, 0});
 	}
 
 	if (input_isDown(keyAssignments[STEELPUSH])) {
-		Vec2_t offset = vec2_diff(phys_getBodyPos(wax), (Vec2_t){input_getMouseX(), input_getMouseY()});
+		Vec2_t offset = vec2_diff(wax->p, (Vec2_t){input_getMouseX(), input_getMouseY()}); //Scale screen to world. 
 		double len = vec2_mag(offset);
 		offset = vec2_scale(vec2_norm(offset), 5000);
-		phys_forceBody(wax, offset);
+		body_applyForce(wax, offset);
 	}
-	//etc. 
 }
+
+
+
+static inline double doubleClock(void)
+{
+	struct timespec t;
+	clock_gettime(CLOCK_MONOTONIC, &t);
+	return (double)t.tv_sec + (double)t.tv_nsec/1e9;
+}
+
+void updatePhys(Body_t *wax, Body_t *coins[MAX_NUM_COINS], int numCoins)
+{
+	static double tPrev = -1;
+	if (tPrev == -1) {
+		tPrev = doubleClock();
+		return;
+	}
+
+	double tNow = doubleClock();
+	double dt = tNow - tPrev;
+	tPrev = tNow;
+
+	body_update(wax, dt);
+	for (int i = 0; i < numCoins; i++) {
+		body_update(coins[i], dt);
+	}
+}
+
 
 
 
@@ -142,13 +177,13 @@ int main(void)
 
 	input_init();
 
-	PhysId_t wax = phys_addBody(100, 0, 0);
+	Body_t wax = body_init(100, (Vec2_t){100, 100}, 1, 2); //In metres. 
 
 
 	while (isRunning) {
 
 		input_update();
-		handleInput(wax);
+		handleInput(&wax);
 
 
 		phys_update();
@@ -158,8 +193,7 @@ int main(void)
 		SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
 		SDL_RenderClear(renderer);
 
-		Vec2_t waxPos = phys_getBodyPos(wax);
-		SDL_Rect fillRect = {waxPos.x, waxPos.y, 10, 20};
+		SDL_Rect fillRect = {wax.p.x, wax.p.y, 10, 20};
 		SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
 		SDL_RenderFillRect(renderer, &fillRect);
 

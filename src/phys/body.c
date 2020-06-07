@@ -10,13 +10,16 @@
  * @param y The initial y position of the body. 
  * @return Body_t The body with the specified mass and position, with all other state variables zeroed. 
  */
-Body_t body_init(double m, double x, double y)
+Body_t body_init(double m, Vec2_t pos, double width, double height)
 {
 	Body_t body = {
 		.isLocked = 0,
 
+		.width = 0,
+		.height = 0,
+
 		.m = m, 
-		.p = {x, y}, 
+		.p = pos, 
 		.v = VEC2_ZERO,
 
 		.F = VEC2_ZERO
@@ -33,8 +36,26 @@ Body_t body_init(double m, double x, double y)
  */
 void body_applyForce(Body_t *body, Vec2_t F)
 {
-	body->F = vec2_sum(body->F, F);
+	if (!body->isLocked) {
+		body->F = vec2_sum(body->F, F);
+	}
 }
+
+
+void body_applyImpulse(Body_t *body, Vec2_t dp)
+{
+	if (!body->isLocked) {
+		body->v = vec2_sum(body->v, vec2_scale(dp, 1/body->m));
+	}
+}
+
+
+void body_collide(Body_t *b1, Body_t *b2, double F) {
+	Vec2_t dirAB = vec2_norm(vec2_diff(b2->p, b1->p));
+	body_applyForce(b1, vec2_scale(dirAB, F));
+	body_applyForce(b2, vec2_scale(dirAB, -F));
+}
+
 
 /**
  * @brief Applies the accumulated net force and update the state of @p body via simple Euler integration. 
