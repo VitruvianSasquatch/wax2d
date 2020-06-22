@@ -16,10 +16,12 @@
 
 #include <time.h>
 
-#include "phys/body.h"
-#include "phys/vec2.h"
+#include "model/phys/body.h"
+#include "model/phys/vec2.h"
 
-#include "eng/input.h"
+#include "view/view.h"
+
+#include "controller/input.h"
 
 
 
@@ -144,7 +146,8 @@ static inline double doubleClock(void)
 	return (double)t.tv_sec + (double)t.tv_nsec/1e9;
 }
 
-void updatePhys(Body_t *wax, Body_t *coins[MAX_NUM_COINS], int numCoins)
+
+void updatePhys(Body_t *wax, Body_t coins[MAX_NUM_COINS], int numCoins)
 {
 	static double tPrev = -1;
 	if (tPrev == -1) {
@@ -158,7 +161,7 @@ void updatePhys(Body_t *wax, Body_t *coins[MAX_NUM_COINS], int numCoins)
 
 	body_update(wax, dt);
 	for (int i = 0; i < numCoins; i++) {
-		body_update(coins[i], dt);
+		body_update(&coins[i], dt);
 	}
 }
 
@@ -177,8 +180,15 @@ int main(void)
 
 	input_init();
 
-	Body_t wax = body_init(100, (Vec2_t){100, 100}, 1, 2); //In metres. 
+	view_init(renderer, 40, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+	Body_t wax = body_init(100, (Vec2_t){100, 100}, 1, 2); //In metres. 
+	Body_t coins[MAX_NUM_COINS] = {0};
+	int numCoins = 0;
+
+
+	World_t world;
+	world_init(&world, 100, 100, 2);
 
 	while (isRunning) {
 
@@ -186,18 +196,10 @@ int main(void)
 		handleInput(&wax);
 
 
-		phys_update();
+		updatePhys(&wax, coins, numCoins);
 
 
-		//Clear screen:
-		SDL_SetRenderDrawColor(renderer, 0xff, 0xff, 0xff, 0xff);
-		SDL_RenderClear(renderer);
-
-		SDL_Rect fillRect = {wax.p.x, wax.p.y, 10, 20};
-		SDL_SetRenderDrawColor(renderer, 0xff, 0x00, 0x00, 0xff);
-		SDL_RenderFillRect(renderer, &fillRect);
-
-		SDL_RenderPresent(renderer);
+		view_draw(&wax, coins, numCoins, NULL, 0, &world);
 
 	}
 
