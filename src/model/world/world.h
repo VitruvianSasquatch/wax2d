@@ -2,7 +2,7 @@
 #define WORLD_H
 
 
-#include <stdint.h>
+#include "common.h"
 
 //#define I(i,j) ()
 

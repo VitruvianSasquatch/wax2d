@@ -6,10 +6,11 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Apr 28 09:17:48 2021
+# Make data base, printed on Wed Apr 28 10:30:35 2021
 
 # Variables
 
+ 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # automatic
@@ -41,7 +42,7 @@ MAKE_VERSION := 4.2.1
 # makefile
 CURDIR := /home/sam/wax2d
 # makefile (from 'Makefile', line 1)
-SHELL := /bin/bash
+SHELL := /bin/zsh
 # makefile (from 'Makefile', line 8)
 BIN := main
 # environment
@@ -51,7 +52,7 @@ VSCODE_NLS_CONFIG = {"locale":"en-gb","availableLanguages":{},"_languagePackSupp
 # environment
 _ = /usr/share/codium/codium
 # makefile (from 'Makefile', line 4)
-CFLAGS := -g -std=gnu11 -Wall -Wextra -Wpedantic
+CFLAGS := -g -std=gnu11 -Wall -Wextra -Wpedantic -I ./src
 # environment
 XDG_CONFIG_DIRS = /etc/xdg/xdg-cinnamon:/etc/xdg
 # environment
@@ -223,6 +224,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 PAGER = less
 # environment
+ 
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # makefile (from 'Makefile', line 5)
 CLIBS := -lm -lSDL2 -lSDL2_image
@@ -253,12 +255,12 @@ VSCODE_PID = 249647
 
 # src/controller (device 66307, inode 16260441): No files, no impossibilities so far.
 # src/model/world (device 66307, inode 16260451): No files, no impossibilities so far.
-# . (device 66307, inode 16260389): 9 files, no impossibilities.
+# . (device 66307, inode 16260389): 10 files, no impossibilities.
 # src/view (device 66307, inode 16260454): No files, no impossibilities so far.
 # src/model/phys (device 66307, inode 16260446): No files, no impossibilities so far.
 # src (device 66307, inode 16260437): No files, no impossibilities so far.
 
-# 9 files, no impossibilities in 6 directories.
+# 10 files, no impossibilities in 6 directories.
 
 # Implicit Rules
 
@@ -277,7 +279,6 @@ build/%.o: %.c
 build/src/controller/input.d:
 #  Implicit rule search has been done.
 #  Last modified 2021-04-28 09:12:53.349267913
- 
 #  File has been updated.
 #  Successfully updated.
 
@@ -304,7 +305,7 @@ src/view/tilemap.c:
 
 build/main: build/src/model/phys/body.o build/src/model/phys/vec2.o build/src/model/world/world.o build/src/controller/input.o build/src/main.o build/src/view/view.o build/src/view/tilemap.o
 #  Implicit rule search has not been done.
-#  Last modified 2021-04-28 09:15:38.216728616
+#  Last modified 2021-04-28 10:30:12.225415148
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 26):
@@ -327,6 +328,7 @@ all: build/main
 #  File has not been updated.
 
 # Not a target:
+ 
 src/controller/input.h:
 #  Implicit rule search has been done.
 #  Last modified 2021-04-28 09:08:32.342127125
@@ -336,7 +338,14 @@ src/controller/input.h:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:08:32.342127125
+#  Last modified 2021-04-28 10:30:09.385421747
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+src/common.h:
+#  Implicit rule search has been done.
+#  Last modified 2021-04-23 15:48:07.96514
 #  File has been updated.
 #  Successfully updated.
 
@@ -388,7 +397,8 @@ src/model/phys/vec2.c:
 # Not a target:
 build/src/view/view.d:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:15:38.140728864
+#  Last modified 2021-04-28 10:30:12.165415288
+ 
 #  File has been updated.
 #  Successfully updated.
 
@@ -402,7 +412,7 @@ src/view/view.c:
 # Not a target:
 build/src/main.d:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:15:37.976729399
+#  Last modified 2021-04-28 10:30:12.00141567
 #  File has been updated.
 #  Successfully updated.
 
@@ -449,8 +459,9 @@ src/model/phys/vec2.h:
 
 # Not a target:
 build/src/model/world/world.d:
+ 
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:10:26.685749722
+#  Last modified 2021-04-28 10:30:11.837416051
 #  File has been updated.
 #  Successfully updated.
 
@@ -464,14 +475,14 @@ src/view/view.h:
 # Not a target:
 src/view/../model/world/world.h:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:08:32.346127112
+#  Last modified 2021-04-28 10:26:18.78192692
 #  File has been updated.
 #  Successfully updated.
 
 # Not a target:
 src/model/world/world.c:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:08:32.346127112
+#  Last modified 2021-04-28 10:26:10.665943412
 #  File has been updated.
 #  Successfully updated.
 
@@ -507,14 +518,15 @@ build/src/model/phys/vec2.o: src/model/phys/vec2.c src/model/phys/vec2.c src/mod
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 38):
 	mkdir -p $(@D)
+ 
 	# The -MMD flags additionaly creates a .d file with
 	# the same name as the .o file.
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
-build/src/view/view.o: src/view/view.c src/view/view.c src/view/../model/phys/vec2.h src/view/../model/phys/body.h src/view/../model/phys/vec2.h src/view/../model/world/world.h
+build/src/view/view.o: src/view/view.c src/view/view.c src/view/../model/phys/vec2.h src/view/../model/phys/body.h src/view/../model/phys/vec2.h src/view/../model/world/world.h src/common.h
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'src/view/view'
-#  Last modified 2021-04-28 09:15:38.148728837
+#  Last modified 2021-04-28 10:30:12.177415261
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 38):
@@ -523,10 +535,10 @@ build/src/view/view.o: src/view/view.c src/view/view.c src/view/../model/phys/ve
 	# the same name as the .o file.
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
-build/src/main.o: src/main.c src/main.c src/model/phys/body.h src/model/phys/vec2.h src/model/phys/vec2.h src/view/view.h src/view/../model/phys/vec2.h src/view/../model/phys/body.h src/view/../model/world/world.h src/controller/input.h
+build/src/main.o: src/main.c src/main.c src/model/phys/body.h src/model/phys/vec2.h src/model/phys/vec2.h src/view/view.h src/view/../model/phys/vec2.h src/view/../model/phys/body.h src/view/../model/world/world.h src/common.h src/controller/input.h
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'src/main'
-#  Last modified 2021-04-28 09:15:37.984729373
+#  Last modified 2021-04-28 10:30:12.009415651
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 38):
@@ -538,7 +550,7 @@ build/src/main.o: src/main.c src/main.c src/model/phys/body.h src/model/phys/vec
 # Not a target:
 src/model/world/world.h:
 #  Implicit rule search has been done.
-#  Last modified 2021-04-28 09:08:32.346127112
+#  Last modified 2021-04-28 10:26:18.78192692
 #  File has been updated.
 #  Successfully updated.
 
@@ -554,33 +566,33 @@ build/src/model/phys/body.o: src/model/phys/body.c src/model/phys/body.c src/mod
 	# the same name as the .o file.
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
-build/src/model/world/world.o: src/model/world/world.c src/model/world/world.c src/model/world/world.h
+build/src/model/world/world.o: src/model/world/world.c src/model/world/world.c src/model/world/world.h src/common.h
 #  Implicit rule search has been done.
 #  Implicit/static pattern stem: 'src/model/world/world'
- 
-#  Last modified 2021-04-28 09:10:26.689749709
+#  Last modified 2021-04-28 10:30:11.841416042
 #  File has been updated.
 #  Successfully updated.
 #  recipe to execute (from 'Makefile', line 38):
 	mkdir -p $(@D)
 	# The -MMD flags additionaly creates a .d file with
+ 
 	# the same name as the .o file.
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
 # files hash-table stats:
-# Load=37/1024=4%, Rehash=0, Collisions=0/117=0%
+# Load=38/1024=4%, Rehash=0, Collisions=0/121=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 60 / storage = 1027 B / avg = 17 B
-# current buf: size = 8162 B / used = 1027 B / count = 60 / avg = 17 B
+# strcache buffers: 1 (0) / strings = 62 / storage = 1047 B / avg = 16 B
+# current buf: size = 8162 B / used = 1047 B / count = 62 / avg = 16 B
 
-# strcache performance: lookups = 124 / hit rate = 51%
+# strcache performance: lookups = 128 / hit rate = 51%
 # hash-table stats:
-# Load=60/8192=1%, Rehash=0, Collisions=1/124=1%
-# Finished Make data base on Wed Apr 28 09:17:48 2021
+# Load=62/8192=1%, Rehash=0, Collisions=1/128=1%
+# Finished Make data base on Wed Apr 28 10:30:35 2021
 
  

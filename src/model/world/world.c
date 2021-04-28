@@ -1,6 +1,5 @@
-
-
 #include "world.h"
+#include "math.h"
 
 
 World_t *world_init(World_t *world, int width, int height, double blocksPerUnit)

@@ -1,36 +1,6 @@
-make --dry-run --always-make --keep-going --print-directory
+make --dry-run --keep-going --print-directory
 make: Entering directory '/home/sam/wax2d'
-mkdir -p build/src/model/phys
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/model/phys/body.c -o build/src/model/phys/body.o
-mkdir -p build/src/model/phys
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/model/phys/vec2.c -o build/src/model/phys/vec2.o
-mkdir -p build/src/model/world
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/model/world/world.c -o build/src/model/world/world.o
-mkdir -p build/src/controller
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/controller/input.c -o build/src/controller/input.o
-mkdir -p build/src
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/main.c -o build/src/main.o
-mkdir -p build/src/view
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/view/view.c -o build/src/view/view.o
-mkdir -p build/src/view
-# The -MMD flags additionaly creates a .d file with
-# the same name as the .o file.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic -MMD -c src/view/tilemap.c -o build/src/view/tilemap.o
-# Create build directories - same structure as sources.
-mkdir -p build
-# Just link all the object files.
-gcc -g -std=gnu11 -Wall -Wextra -Wpedantic build/src/model/phys/body.o build/src/model/phys/vec2.o build/src/model/world/world.o build/src/controller/input.o build/src/main.o build/src/view/view.o build/src/view/tilemap.o -o build/main -lm -lSDL2 -lSDL2_image
+ 
+make: Nothing to be done for 'all'.
 make: Leaving directory '/home/sam/wax2d'
  

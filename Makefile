@@ -1,7 +1,7 @@
-SHELL := /bin/bash
+SHELL := /bin/zsh
 
 CC := gcc
-CFLAGS := -g -std=gnu11 -Wall -Wextra -Wpedantic
+CFLAGS := -g -std=gnu11 -Wall -Wextra -Wpedantic -I ./src
 CLIBS := -lm -lSDL2 -lSDL2_image
 
 # Final binary
