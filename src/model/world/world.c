@@ -2,13 +2,13 @@
 #include "math.h"
 
 
-World_t *world_init(World_t *world, int width, int height, double blocksPerUnit)
+World_t *world_init(size_t width, size_t height, double blocksPerUnit)
 {
+	World_t *world = calloc(1, sizeof(World_t));
 	world->width = width;
 	world->height = height;
 	world->blocksPerUnit = blocksPerUnit;
-	world->collision = malloc(sizeof(Block_t)*width*height);
-
+	return world;
 }
 
 
@@ -21,10 +21,9 @@ void world_free(World_t *world)
 
 Block_t world_getType(World_t *world, double x, double y)
 {
-	Block_t (*collision)[world->height] = world->collision;
-	double xBlocks = x*world->blocksPerUnit;
-	double yBlocks = y*world->blocksPerUnit;
-	return collision[(int)xBlocks][(int)yBlocks];
+	size_t xBlocks = floor(x*world->blocksPerUnit);
+	size_t yBlocks = floor(y*world->blocksPerUnit);
+	return world->collision[xBlocks + yBlocks*world->width];
 }
 
 Block_t world_getCollision(World_t *world, double x, double y)
@@ -33,9 +32,10 @@ Block_t world_getCollision(World_t *world, double x, double y)
 	double xBlocks = x*world->blocksPerUnit;
 	double yBlocks = y*world->blocksPerUnit;
 
+	double dx = xBlocks - floor(xBlocks);
+	double dy = yBlocks - floor(yBlocks);
+
 	switch (block) {
-		double dx = xBlocks - floor(xBlocks);
-		double dy = yBlocks - floor(yBlocks);
 		case FULL:
 			return FULL;
 			break;
@@ -54,6 +54,4 @@ Block_t world_getCollision(World_t *world, double x, double y)
 		default:
 			return EMPTY;
 	}
-		
-
 }

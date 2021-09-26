@@ -21,14 +21,14 @@ typedef enum {
 
 
 typedef struct {
-	int width; //in blocks
-	int height;
+	size_t width; //in blocks
+	size_t height;
 	double blocksPerUnit;
 	Block_t *collision;
 } World_t;
 
 
-World_t *world_init(World_t *world, int width, int height, double blocksPerUnit);
+World_t *world_init(size_t width, size_t height, double blocksPerUnit);
 
 void world_free(World_t *world);
 

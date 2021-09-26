@@ -131,7 +131,6 @@ void handleInput(Body_t *wax)
 
 	if (input_isDown(keyAssignments[STEELPUSH])) {
 		Vec2_t offset = vec2_diff(wax->p, (Vec2_t){input_getMouseX(), input_getMouseY()}); //Scale screen to world. 
-		double len = vec2_mag(offset);
 		offset = vec2_scale(vec2_norm(offset), 5000);
 		body_applyForce(wax, offset);
 	}
@@ -147,7 +146,7 @@ static inline double doubleClock(void)
 }
 
 
-void updatePhys(Body_t *wax, Body_t coins[MAX_NUM_COINS], int numCoins)
+void updatePhys(Body_t *wax, Body_t coins[MAX_NUM_COINS], size_t numCoins)
 {
 	static double tPrev = -1;
 	if (tPrev == -1) {
@@ -160,7 +159,7 @@ void updatePhys(Body_t *wax, Body_t coins[MAX_NUM_COINS], int numCoins)
 	tPrev = tNow;
 
 	body_update(wax, dt);
-	for (int i = 0; i < numCoins; i++) {
+	for (size_t i = 0; i < numCoins; i++) {
 		body_update(&coins[i], dt);
 	}
 }
@@ -184,11 +183,10 @@ int main(void)
 
 	Body_t wax = body_init(100, (Vec2_t){100, 100}, 1, 2); //In metres. 
 	Body_t coins[MAX_NUM_COINS] = {0};
-	int numCoins = 0;
+	size_t numCoins = 0;
 
 
-	World_t world;
-	world_init(&world, 100, 100, 2);
+	World_t *world = world_init(100, 100, 2);
 
 	while (isRunning) {
 
@@ -199,7 +197,7 @@ int main(void)
 		updatePhys(&wax, coins, numCoins);
 
 
-		view_draw(&wax, coins, numCoins, NULL, 0, &world);
+		view_draw(&wax, coins, numCoins, NULL, 0, world);
 
 	}
 

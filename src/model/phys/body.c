@@ -15,8 +15,8 @@ Body_t body_init(double m, Vec2_t pos, double width, double height)
 	Body_t body = {
 		.isLocked = 0,
 
-		.width = 0,
-		.height = 0,
+		.width = width,
+		.height = height,
 
 		.m = m, 
 		.p = pos, 
